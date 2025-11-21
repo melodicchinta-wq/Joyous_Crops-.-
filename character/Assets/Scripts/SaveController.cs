@@ -1,5 +1,3 @@
-
-using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -8,38 +6,50 @@ using UnityEngine;
 public class SaveController : MonoBehaviour
 {
     private string saveLocation;
-    // Start is called before the first frame update
+
     void Start()
     {
-        // define save location
         saveLocation = Path.Combine(Application.persistentDataPath, "saveData.json");
-
         LoadGame();
     }
+
     public void SaveGame()
     {
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+
+        if (player == null)
+        {
+            Debug.LogError("Player tidak ditemukan!");
+            return;
+        }
+
         SaveData saveData = new SaveData
         {
-            playerPosition = GameObject.FindGameObjectWithTag("Player").transform.position,
-            mapBoundary = FindObjectOfType<CinemachineConfiner>().m_BoundingShape2D.gameObject.name
+            playerPosition = player.transform.position
         };
 
         File.WriteAllText(saveLocation, JsonUtility.ToJson(saveData));
+        Debug.Log("Game saved!");
     }
+
     public void LoadGame()
     {
-        if(File.Exists(saveLocation))
+        if (File.Exists(saveLocation))
         {
             SaveData saveData = JsonUtility.FromJson<SaveData>(File.ReadAllText(saveLocation));
 
-            GameObject.FindGameObjectWithTag("Player").transform.position = saveData.playerPosition;
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
 
-            FindObjectOfType<CinemachineConfiner>().m_BoundingShape2D = GameObject.Find(saveData.mapBoundary).GetComponent<PolygonCollider2D>();
+            if (player != null)
+            {
+                player.transform.position = saveData.playerPosition;
+            }
+
+            Debug.Log("Game loaded!");
         }
         else
         {
             SaveGame();
         }
     }
-
 }

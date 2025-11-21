@@ -21,11 +21,7 @@ public class Movement : MonoBehaviour
         direction = new Vector3(horizontal, vertical);
 
         AnimateMovement(direction);    
-    }
-
-    private void FixedUpdate()
-    {
-        //move the player
+    
         transform.position += direction * speed * Time.deltaTime;
     }
 
