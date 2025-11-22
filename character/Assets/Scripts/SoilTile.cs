@@ -12,7 +12,10 @@ public class SoilTile : MonoBehaviour
 
     [Header("Spawn")]
     public Transform plantSpawnPoint;
-    [HideInInspector] public Plant currentPlant; // visible di inspector (untuk debug)
+    [HideInInspector] public Plant currentPlant;
+
+    [Header("References")]
+    public Inventory playerInventory;   // ← PENTING
 
     private SpriteRenderer sr;
 
@@ -22,6 +25,7 @@ public class SoilTile : MonoBehaviour
         UpdateSprite();
     }
 
+    // HOE
     public void Hoe()
     {
         if (currentState != SoilState.Grass) return;
@@ -29,7 +33,7 @@ public class SoilTile : MonoBehaviour
         UpdateSprite();
     }
 
-    // plantPrefab datang dari player
+    // PLANT SEED
     public void PlantSeed(Plant plantPrefab)
     {
         if (plantPrefab == null) return;
@@ -37,52 +41,61 @@ public class SoilTile : MonoBehaviour
 
         currentPlant = Instantiate(plantPrefab, plantSpawnPoint.position, Quaternion.identity);
         currentPlant.SetSoil(this);
-        currentState = SoilState.Hoed; // tetap coklat saat ada tanaman
+
+        currentPlant.ResetPlant();
+        currentState = SoilState.Hoed;
         UpdateSprite();
     }
 
-    // memanggil watering pada plant (jika ada) — juga ubah sprite tanah jadi watered
+    // WATER
     public void Water()
     {
-        if (currentState != SoilState.Hoed && currentState != SoilState.Watered) return;
         if (currentPlant != null)
-        {
             currentPlant.OnWatered();
-        }
 
         currentState = SoilState.Watered;
         UpdateSprite();
     }
 
+    // FERTILIZE
     public void Fertilize()
     {
         if (currentPlant == null) return;
         currentPlant.OnFertilized();
-        // optionally change sprite slightly (we keep same watered sprite)
     }
 
-    // dipanggil saat panen; jika tanaman siap dan tidak mati -> return result
-    public (string name, int qty) Harvest()
+    // HARVEST
+    public (string name, int qty, Plant prefab, Sprite icon) Harvest()
     {
-        if (currentPlant == null) return (null, 0);
-        if (currentPlant.IsDead()) return (null, 0);
-        if (!currentPlant.IsReady()) return (null, 0);
+        if (currentPlant == null)
+            return (null, 0, null, null);
 
-        var res = currentPlant.Harvest();
+        if (currentPlant.seedData == null)
+        {
+            Debug.LogError("Plant tidak punya SeedData! Assign seedData di prefab Plant!");
+            return (null, 0, null, null);
+        }
+
+        string seedName = currentPlant.seedData.seedName;
+        Plant prefabAsli = currentPlant.seedData.prefab;
+        Sprite iconAsli = currentPlant.seedData.icon;
+
+        int qty = Random.Range(1, 3);
+
         Destroy(currentPlant.gameObject);
         currentPlant = null;
 
-        // setelah panen, tanah tetap hoed (coklat)
         currentState = SoilState.Hoed;
         UpdateSprite();
 
-        return res;
+        return (seedName, qty, prefabAsli, iconAsli);
     }
 
-    // buang tanaman mati
+    // REMOVE DEAD PLANT
     public void RemoveDeadPlant()
     {
         if (currentPlant == null) return;
+
         if (currentPlant.IsDead())
         {
             Destroy(currentPlant.gameObject);
@@ -92,26 +105,32 @@ public class SoilTile : MonoBehaviour
         }
     }
 
+    // RESET SOIL
     public void ResetSoil()
     {
-        if (currentPlant != null) Destroy(currentPlant.gameObject);
+        if (currentPlant != null)
+            Destroy(currentPlant.gameObject);
+
         currentPlant = null;
         currentState = SoilState.Grass;
         UpdateSprite();
     }
 
+    // CALLBACK READY
     public void OnPlantReady()
     {
-        // callback jika mau (kosong untuk sekarang)
+        Debug.Log("Tanaman siap panen.");
     }
 
+    // UPDATE SPRITE
     void UpdateSprite()
     {
-        switch (currentState)
+        sr.sprite = currentState switch
         {
-            case SoilState.Grass: sr.sprite = grassSprite; break;
-            case SoilState.Hoed: sr.sprite = hoedSprite; break;
-            case SoilState.Watered: sr.sprite = wateredSprite; break;
-        }
+            SoilState.Grass => grassSprite,
+            SoilState.Hoed => hoedSprite,
+            SoilState.Watered => wateredSprite,
+            _ => grassSprite
+        };
     }
 }

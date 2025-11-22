@@ -1,3 +1,4 @@
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class InventoryUI : MonoBehaviour
@@ -5,22 +6,9 @@ public class InventoryUI : MonoBehaviour
     public Inventory inventory;
     public InventorySlotUI[] slots;
 
-    private int selectedIndex = 0;
+    private int selectedIndex = -1;
 
-    void Start()
-    {
-        // Init semua slot
-        for (int i = 0; i < slots.Length; i++)
-            slots[i].Init(i, this);
-
-        // Subscribe event inventory
-        if (inventory != null)
-            inventory.OnInventoryChanged += UpdateUI;
-
-        UpdateUI();
-        HighlightSelectedSlot(selectedIndex);
-    }
-
+    void Start() => UpdateUI();
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Alpha1)) SelectSlot(0);
@@ -31,30 +19,40 @@ public class InventoryUI : MonoBehaviour
     public void SelectSlot(int index)
     {
         selectedIndex = index;
-        inventory.SelectIndex(index);
-        HighlightSelectedSlot(index);
+        inventory.activeSeedIndex = index;
+        UpdateHighlight();
     }
-
-    void HighlightSelectedSlot(int index)
+    void UpdateHighlight()
     {
         for (int i = 0; i < slots.Length; i++)
-            slots[i].Highlight(i == index);
+        {
+            var seed = slots[i].GetCurrentSeed();
+            bool isActive = (seed != null && selectedIndex >= 0 &&
+                             selectedIndex < inventory.seeds.Count &&
+                             seed == inventory.seeds[selectedIndex]);
+            slots[i].SetHighlight(isActive);
+        }
     }
 
     public void UpdateUI()
     {
+        var tempSeeds = new List<SeedItem>(inventory.seeds);
+
         for (int i = 0; i < slots.Length; i++)
         {
-            if (i < inventory.seeds.Count)
-                slots[i].SetSlot(inventory.seeds[i]);
+            SeedItem seedToShow = tempSeeds.Find(s => s.amount > 0);
+            if (seedToShow != null)
+            {
+                slots[i].SetSlot(seedToShow);
+                tempSeeds.Remove(seedToShow);
+            }
             else
-                slots[i].SetSlot(new SeedItem { amount = 0 }); // slot kosong
+            {
+                slots[i].ClearSlot();
+            }
         }
+
+        UpdateHighlight();
     }
 
-    private void OnDestroy()
-    {
-        if (inventory != null)
-            inventory.OnInventoryChanged -= UpdateUI;
-    }
 }

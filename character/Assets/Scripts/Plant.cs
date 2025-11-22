@@ -8,13 +8,18 @@ public class Plant : MonoBehaviour
     public Sprite stage3;
 
     [Header("Growth")]
-    public float growTimePerStage = 5f; // waktu tahap (detik)
-    public float waterDeadline = 7f;    // kalau tidak disiram dalam waktu ini => mati
-    public float fertilizerSpeedMultiplier = 1.7f; // lebih cepat jika dipupuk
+    public float growTimePerStage = 5f;
+    public float waterDeadline = 7f;
+    public float fertilizerSpeedMultiplier = 1.7f;
 
-    [Header("Harvest")]
-    public string seedName; // nama item yang akan ditambahkan ke inventory saat panen
+    [Header("Harvest Info")]
+    public string seedName;
     public int harvestQuantity = 1;
+    public Sprite seedIcon;     // icon untuk inventory
+    public Plant seedPrefab;    // prefab untuk ditanam lagi
+    [Header("Seed Data")]
+    public SeedData seedData;
+
 
     private SpriteRenderer sr;
     private int currentStage = 0;
@@ -23,7 +28,8 @@ public class Plant : MonoBehaviour
     private bool watered = false;
     private bool fertilized = false;
     private bool dead = false;
-    private SoilTile soil; // referensi ke tanah
+
+    private SoilTile soil;
 
     void Awake()
     {
@@ -31,26 +37,12 @@ public class Plant : MonoBehaviour
         UpdateSprite();
     }
 
-    public void SetSoil(SoilTile s)
-    {
-        soil = s;
-    }
-
+    public void SetSoil(SoilTile s) => soil = s;
     public bool IsDead() => dead;
-    public bool IsReady() => !dead && currentStage >= 2; // stage 2 = ready
+    public bool IsReady() => (!dead && currentStage >= 2);
 
-    // dipanggil tanah saat disiram/pupuk agar plant tahu
-    public void OnWatered()
-    {
-        watered = true;
-        // reset waktu sejak planted sehingga deadline mulai dihitung dari tanam
-        // (opsional: kita biarkan waterDeadline berlaku dari waktu tanam)
-    }
-
-    public void OnFertilized()
-    {
-        fertilized = true;
-    }
+    public void OnWatered() => watered = true;
+    public void OnFertilized() => fertilized = true;
 
     void Update()
     {
@@ -58,14 +50,12 @@ public class Plant : MonoBehaviour
 
         timeSincePlanted += Time.deltaTime;
 
-        // belum disiram dan sudah melewati deadline -> mati
         if (!watered && timeSincePlanted >= waterDeadline)
         {
             Die();
             return;
         }
 
-        // growth hanya berjalan jika sudah disiram setidaknya sekali
         if (watered)
         {
             float speed = fertilized ? fertilizerSpeedMultiplier : 1f;
@@ -74,17 +64,15 @@ public class Plant : MonoBehaviour
             if (currentStage == 0 && stageTimer >= growTimePerStage)
             {
                 currentStage = 1;
-                stageTimer = 0f;
+                stageTimer = 0;
                 UpdateSprite();
             }
             else if (currentStage == 1 && stageTimer >= growTimePerStage)
             {
                 currentStage = 2;
-                stageTimer = 0f;
+                stageTimer = 0;
                 UpdateSprite();
-
-                // beri tahu tanah bahwa tanaman sudah siap panen (opsional)
-                if (soil != null) soil.OnPlantReady();
+                soil?.OnPlantReady();
             }
         }
     }
@@ -92,6 +80,7 @@ public class Plant : MonoBehaviour
     void UpdateSprite()
     {
         if (sr == null) return;
+
         if (currentStage == 0) sr.sprite = stage1;
         else if (currentStage == 1) sr.sprite = stage2;
         else sr.sprite = stage3;
@@ -100,17 +89,23 @@ public class Plant : MonoBehaviour
     public void Die()
     {
         dead = true;
-        // bisa ganti sprite jadi "dead" atau buat efek
-        // untuk sekarang, biarkan tetap stage1/2 sprite tapi IsDead true
-        // jika mau, set warna ke coklat
-        if (sr != null) sr.color = new Color(0.5f, 0.4f, 0.4f);
+        if (sr != null)
+            sr.color = new Color(0.5f, 0.4f, 0.4f);
     }
 
-    // dipanggil saat player panen; kembalikan data panen
-    public (string name, int qty) Harvest()
+    // dipanggil ketika ditanam agar stage normal lagi
+    public void ResetPlant()
     {
-        return (seedName, harvestQuantity);
-    }
+        currentStage = 0;
+        stageTimer = 0;
+        timeSincePlanted = 0;
+        watered = false;
+        fertilized = false;
+        dead = false;
 
-    // dipanggil saat player membuang tanaman mati (Destroy dipanggil di SoilTile)
+        if (sr != null)
+            sr.color = Color.white;
+
+        UpdateSprite();
+    }
 }
