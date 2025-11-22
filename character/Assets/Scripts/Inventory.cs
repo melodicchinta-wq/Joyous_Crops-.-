@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,48 +9,85 @@ public class SeedItem
     public Plant plantPrefab;
     public int amount;
     public Sprite icon;
-    public int maxHarvestBonus = 2; // maksimal bonus saat panen
 }
+
 public class Inventory : MonoBehaviour
 {
     public List<SeedItem> seeds = new List<SeedItem>();
     public int activeSeedIndex = -1;
 
-    public event Action OnInventoryChanged;
+    public bool hasHoe = false;
+    public bool hasWaterBottle = false;
 
+    void Start()
+    {
+        seeds = new List<SeedItem>(); // mulai kosong
+        activeSeedIndex = -1;
+        hasHoe = false;
+        hasWaterBottle = false;
+    }
+
+    // -------------------------------
+    // SELECT ITEM
+    // -------------------------------
     public void SelectIndex(int index)
     {
-        if (index < 0 || index >= seeds.Count) activeSeedIndex = -1;
-        else activeSeedIndex = index;
+        if (index < 0 || index >= seeds.Count)
+            activeSeedIndex = -1;
+        else
+            activeSeedIndex = index;
     }
 
     public SeedItem GetActiveSeedItem()
     {
-        if (activeSeedIndex < 0 || activeSeedIndex >= seeds.Count) return null;
+        if (activeSeedIndex < 0 || activeSeedIndex >= seeds.Count)
+            return null;
         return seeds[activeSeedIndex];
     }
 
-    public bool UseActiveSeed()
+    // -------------------------------
+    // USE ITEM
+    // -------------------------------
+    public bool UseActiveSeed(int count = 1)
     {
         var s = GetActiveSeedItem();
-        if (s == null || s.amount <= 0) return false;
-        s.amount--;
-        if (s.amount <= 0) activeSeedIndex = -1;
+        if (s == null || s.amount < count)
+            return false;
 
-        OnInventoryChanged?.Invoke();
+        s.amount -= count;
+
+        // jika habis → hapus slot
+        if (s.amount <= 0)
+        {
+            seeds.RemoveAt(activeSeedIndex);
+            activeSeedIndex = -1;
+        }
+
         return true;
     }
 
-    public void AddQuantity(string seedName, int qty)
+    // -------------------------------
+    // ADD ITEM
+    // -------------------------------
+    public void AddQuantity(string seedName, int qty, Plant prefab = null, Sprite icon = null)
     {
-        foreach (var s in seeds)
+        // 1. Jika seed sudah ada → tambah jumlah
+        for (int i = 0; i < seeds.Count; i++)
         {
-            if (s.seedName == seedName)
+            if (seeds[i].seedName == seedName)
             {
-                s.amount += qty;
-                OnInventoryChanged?.Invoke();
+                seeds[i].amount += qty;
                 return;
             }
         }
+
+        // 2. Jika seed baru → tambahkan sebagai slot baru
+        seeds.Add(new SeedItem
+        {
+            seedName = seedName,
+            amount = qty,
+            plantPrefab = prefab,
+            icon = icon
+        });
     }
 }

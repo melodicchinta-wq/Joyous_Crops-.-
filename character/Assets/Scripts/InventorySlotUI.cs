@@ -11,36 +11,46 @@ public class InventorySlotUI : MonoBehaviour
 
     private int slotIndex;
     private InventoryUI ui;
+    private SeedItem currentSeed;
 
     public void Init(int index, InventoryUI uiRef)
     {
         slotIndex = index;
         ui = uiRef;
-
-        button.onClick.AddListener(() =>
-        {
-            ui.SelectSlot(slotIndex);
-        });
+        button.onClick.AddListener(() => ui.SelectSlot(slotIndex));
     }
 
     public void SetSlot(SeedItem seed)
     {
-        if (seed == null || seed.amount <= 0)
+        currentSeed = seed;
+        if (seed != null && seed.amount > 0)
         {
-            icon.enabled = false;
-            qtyText.enabled = false;
-        }
-        else
-        {
-            icon.enabled = true;
-            qtyText.enabled = true;
+            icon.gameObject.SetActive(true);
             icon.sprite = seed.icon;
             qtyText.text = seed.amount.ToString();
         }
+        else
+        {
+            ClearSlot();
+        }
     }
 
-    public void Highlight(bool value)
+
+    public void ClearSlot()
     {
-        highlight.SetActive(value);
+        currentSeed = null;
+        icon.gameObject.SetActive(false);
+        qtyText.text = "";
+        highlight.SetActive(false);
+    }
+    public void SetHighlight(bool value)
+    {
+        if (highlight != null)
+            highlight.SetActive(value);
+    }
+
+    public SeedItem GetCurrentSeed()
+    {
+        return currentSeed;
     }
 }

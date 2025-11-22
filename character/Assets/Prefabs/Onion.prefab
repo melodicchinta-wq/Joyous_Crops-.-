@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &303106403066238132
+--- !u!1 &6634103253707130582
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,9 +8,10 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 8033642576450248095}
-  - component: {fileID: 6277511024937406503}
-  - component: {fileID: 8998011461291329633}
+  - component: {fileID: 6102071504262258945}
+  - component: {fileID: 2440495183119425323}
+  - component: {fileID: 8260173280785558889}
+  - component: {fileID: 9028928494039539756}
   m_Layer: 0
   m_Name: Onion
   m_TagString: Untagged
@@ -18,48 +19,28 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &8033642576450248095
+--- !u!4 &6102071504262258945
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 303106403066238132}
+  m_GameObject: {fileID: 6634103253707130582}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.052982397, y: 0.051041167, z: 0.018786177}
+  m_LocalPosition: {x: -2.0380433, y: -1.0326095, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6277511024937406503
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 303106403066238132}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6a159b41a70b4b44b8d52e3b482f1bd8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  stage1: {fileID: 21300000, guid: 4b5aa37384dcd354194f34784ac98b08, type: 3}
-  stage2: {fileID: 21300000, guid: 4f39b924a448b7040834690292e51065, type: 3}
-  stage3: {fileID: 21300000, guid: 8f5aeb0b609b7e3428d06e2df32054de, type: 3}
-  growTimePerStage: 5
-  waterDeadline: 7
-  fertilizerSpeedMultiplier: 1.7
-  seedName: Onion
-  harvestQuantity: 1
---- !u!212 &8998011461291329633
+--- !u!212 &2440495183119425323
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 303106403066238132}
+  m_GameObject: {fileID: 6634103253707130582}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -93,8 +74,8 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 2
-  m_Sprite: {fileID: 21300000, guid: 4b5aa37384dcd354194f34784ac98b08, type: 3}
+  m_SortingOrder: 10
+  m_Sprite: {fileID: 21300000, guid: 1e7639908ed56554182ca94f8456ba95, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -105,3 +86,70 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!61 &8260173280785558889
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6634103253707130582}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1, y: 1}
+    newSize: {x: 1, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1}
+  m_EdgeRadius: 0
+--- !u!114 &9028928494039539756
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6634103253707130582}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de4d187965ec5e144bcfc284e520300a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stage1: {fileID: 21300000, guid: 1e7639908ed56554182ca94f8456ba95, type: 3}
+  stage2: {fileID: 21300000, guid: 5ed58743ad1faea45a0d622218557ffb, type: 3}
+  stage3: {fileID: 21300000, guid: fb34f801aed59494ca749c8364c9e29e, type: 3}
+  growTimePerStage: 5
+  waterDeadline: 7
+  fertilizerSpeedMultiplier: 1.7
+  seedName: Onion
+  harvestQuantity: 1
+  seedIcon: {fileID: 21300000, guid: f2bb1342553b77f48ae67a2991e6964f, type: 3}
+  seedPrefab: {fileID: 9028928494039539756}
