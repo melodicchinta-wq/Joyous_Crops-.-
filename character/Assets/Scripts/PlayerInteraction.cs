@@ -3,13 +3,36 @@
 public class PlayerInteraction : MonoBehaviour
 {
     public LayerMask soilLayer;
-    public float detectRadius = 0.5f;
-    public Vector2 soilCheckOffset = new Vector2(0, -0.5f);
+    public float detectRadius = 0.2f;
+    public Vector2 soilCheckOffset = new Vector2(0, -0.25f);
 
     private SoilTile currentSoil;
     private Inventory inventory;
     private InventoryUI inventoryUI;
+    public bool hasHoe = false; // awalnya false
+    public string ActiveTool { get { return activeTool; } }
 
+    // Tambahan untuk equip item ke player
+    public GameObject hoeObject; // drag HandTool/Hoe di sini
+    private string activeTool = "";
+
+    // ============================================
+    // EQUIP ITEM
+    // ============================================
+    public void EquipItem(string type)
+    {
+        hoeObject.SetActive(false);
+        if (type == "Hoe")
+        {
+            hoeObject.SetActive(true);
+            activeTool = "Hoe";
+        }
+        else activeTool = "";
+    }
+
+    // ============================================
+    // UNITY LIFECYCLE
+    // ============================================
     void Start()
     {
         inventory = GetComponent<Inventory>();
@@ -20,12 +43,12 @@ public class PlayerInteraction : MonoBehaviour
     {
         DetectSoil();
 
-        // pilih slot seed
+        // pilih slot seed via keyboard
         if (Input.GetKeyDown(KeyCode.Alpha1)) inventory.SelectIndex(0);
         if (Input.GetKeyDown(KeyCode.Alpha2)) inventory.SelectIndex(1);
         if (Input.GetKeyDown(KeyCode.Alpha3)) inventory.SelectIndex(2);
 
-        // cangkul
+        // HOE
         if (Input.GetKeyDown(KeyCode.Q))
         {
             if (!inventory.hasHoe)
@@ -36,54 +59,57 @@ public class PlayerInteraction : MonoBehaviour
             currentSoil?.Hoe();
         }
 
-        // tanam
+        // TANAM / HOE (tekan E)
         if (Input.GetKeyDown(KeyCode.E))
         {
-            var seedItem = inventory.GetActiveSeedItem();
-
-            if (seedItem != null && seedItem.amount > 0)
+            if (currentSoil != null)
             {
-                currentSoil?.PlantSeed(seedItem.plantPrefab);
-
-                if (currentSoil != null && currentSoil.currentState == SoilTile.SoilState.Hoed)
+                // Kalau player punya Hoe
+                if (inventory.hasHoe)
                 {
-                    inventory.UseActiveSeed();
+                    EquipItem("Hoe"); // tampilkan Hoe
+                    currentSoil.Hoe();
                 }
-            }
 
-            inventoryUI.UpdateUI();
+                // Tanam seed
+                var seedItem = inventory.GetActiveSeedItem();
+                if (seedItem != null && seedItem.amount > 0)
+                {
+                    currentSoil.PlantSeed(seedItem.plantPrefab);
+                    if (currentSoil.currentState == SoilTile.SoilState.Hoed)
+                        inventory.UseActiveSeed();
+                }
+
+                inventoryUI.UpdateUI();
+            }
         }
 
-        // air
+        // AIR
         if (Input.GetKeyDown(KeyCode.Z))
             currentSoil?.Water();
 
-        // pupuk
+        // PUPUK
         if (Input.GetKeyDown(KeyCode.X))
             currentSoil?.Fertilize();
 
-        // panen
+        // PANEN
         if (Input.GetKeyDown(KeyCode.C))
         {
             if (currentSoil != null)
             {
                 var resultList = currentSoil.Harvest();
-
                 foreach (var r in resultList)
-                {
                     inventory.AddQuantity(r.name, r.qty, r.prefab, r.icon);
-                }
 
                 inventoryUI.UpdateUI();
-
             }
-
         }
-        if (Input.GetKeyDown(KeyCode.X))  // misal tombol X untuk cabut tanaman mati
+
+        // CABUT TANAMAN MATI
+        if (Input.GetKeyDown(KeyCode.X))
             currentSoil?.RemoveDeadPlant();
 
-
-        // reset tanah
+        // RESET TANAH
         if (Input.GetKeyDown(KeyCode.R))
             currentSoil?.ResetSoil();
     }
@@ -100,20 +126,30 @@ public class PlayerInteraction : MonoBehaviour
         foreach (var hit in hits)
         {
             SoilTile soil = hit.GetComponent<SoilTile>();
-
             if (soil != null)
             {
                 float dist = Vector2.Distance(transform.position, soil.transform.position);
-
-                if (dist < minDistance)
-                {
-                    minDistance = dist;
-                    closest = soil;
-                }
+                if (dist < minDistance) closest = soil;
             }
         }
 
         currentSoil = closest;
     }
 
+    // ============================================
+    // GIZMOS UNTUK DEBUG
+    // ============================================
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.yellow;
+        Vector2 checkPos = (Vector2)transform.position + soilCheckOffset;
+        Gizmos.DrawWireSphere(checkPos, detectRadius);
+
+        // Tambahkan indikator tanah yang terdeteksi
+        if (currentSoil != null)
+        {
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireCube(currentSoil.transform.position, Vector3.one * 0.5f);
+        }
+    }
 }

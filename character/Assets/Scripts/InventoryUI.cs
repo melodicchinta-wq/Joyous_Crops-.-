@@ -54,5 +54,6 @@ public class InventoryUI : MonoBehaviour
 
         UpdateHighlight();
     }
+    
 
 }
