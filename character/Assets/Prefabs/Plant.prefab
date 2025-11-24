@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6102071504262258945}
   - component: {fileID: 2440495183119425323}
   - component: {fileID: 8260173280785558889}
-  - component: {fileID: 9028928494039539756}
+  - component: {fileID: 4818160468463937797}
   m_Layer: 0
   m_Name: Plant
   m_TagString: Untagged
@@ -75,12 +75,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 10
-  m_Sprite: {fileID: 21300000, guid: 2798f69f94da2eb4593cb6e43e25afc3, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 7c89c58080f21c34b9ae681e82102928, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 4, y: 4}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -122,8 +122,8 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
-    newSize: {x: 1, y: 1}
+    oldSize: {x: 4, y: 4}
+    newSize: {x: 4, y: 4}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
@@ -131,7 +131,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &9028928494039539756
+--- !u!114 &4818160468463937797
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -140,17 +140,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 6634103253707130582}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: de4d187965ec5e144bcfc284e520300a, type: 3}
+  m_Script: {fileID: 11500000, guid: 6a159b41a70b4b44b8d52e3b482f1bd8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stage1: {fileID: 21300000, guid: 2798f69f94da2eb4593cb6e43e25afc3, type: 3}
-  stage2: {fileID: 21300000, guid: 1fc7b1dc5a7a71c44a331c19d93477d5, type: 3}
-  stage3: {fileID: 21300000, guid: d871c99be3e55934b8051825d244a469, type: 3}
+  stage1: {fileID: 21300000, guid: 03c12fcc915d4c64cb610d72a8ab3d73, type: 3}
+  stage2: {fileID: 21300000, guid: b6b53447a2003cf4588e0789d04cbe1d, type: 3}
+  stage3: {fileID: 21300000, guid: 1211d52acb7bc3e4daedaf6dee287bbb, type: 3}
   growTimePerStage: 5
   waterDeadline: 7
   fertilizerSpeedMultiplier: 1.7
-  seedName: CarrotSeed
+  seedName: SeedCarrot
   harvestQuantity: 1
-  seedIcon: {fileID: 21300000, guid: 51cf1ca5305e81846932820c3f42635a, type: 3}
-  seedPrefab: {fileID: 9028928494039539756}
-  seedData: {fileID: 11400000, guid: a511c9224f29ef94899deec401b64e6a, type: 2}
+  seedIcon: {fileID: 21300000, guid: 3e36c95b1e0a375448942103bbc39c27, type: 3}
+  seedPrefab: {fileID: 4818160468463937797}
+  seedData: {fileID: 11400000, guid: c44befffd62ccaa4289aef32d516d3b8, type: 2}

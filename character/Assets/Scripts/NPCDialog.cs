@@ -69,11 +69,14 @@ public class NPCDialog : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (collision == null || collision.gameObject == null) return;
+
         if (collision.CompareTag("Player"))
         {
             isPlayerNear = true;
         }
     }
+
 
     private void OnTriggerExit2D(Collider2D collision)
     {

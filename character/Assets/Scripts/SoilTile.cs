@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class SoilTile : MonoBehaviour
 {
@@ -13,9 +14,6 @@ public class SoilTile : MonoBehaviour
     [Header("Spawn")]
     public Transform plantSpawnPoint;
     [HideInInspector] public Plant currentPlant;
-
-    [Header("References")]
-    public Inventory playerInventory;   // ← PENTING
 
     private SpriteRenderer sr;
 
@@ -41,10 +39,7 @@ public class SoilTile : MonoBehaviour
 
         currentPlant = Instantiate(plantPrefab, plantSpawnPoint.position, Quaternion.identity);
         currentPlant.SetSoil(this);
-
         currentPlant.ResetPlant();
-        currentState = SoilState.Hoed;
-        UpdateSprite();
     }
 
     // WATER
@@ -60,35 +55,52 @@ public class SoilTile : MonoBehaviour
     // FERTILIZE
     public void Fertilize()
     {
-        if (currentPlant == null) return;
-        currentPlant.OnFertilized();
+        if (currentPlant != null)
+            currentPlant.OnFertilized();
     }
 
     // HARVEST
-    public (string name, int qty, Plant prefab, Sprite icon) Harvest()
+    public List<(string name, int qty, Plant prefab, Sprite icon)> Harvest()
     {
-        if (currentPlant == null)
-            return (null, 0, null, null);
+        var result = new List<(string, int, Plant, Sprite)>();
 
-        if (currentPlant.seedData == null)
+        if (currentPlant == null)
+            return result;
+
+        // CEK SIAP PANEN
+        if (!currentPlant.IsReadyToHarvest())
         {
-            Debug.LogError("Plant tidak punya SeedData! Assign seedData di prefab Plant!");
-            return (null, 0, null, null);
+            Debug.Log("Belum siap panen!");
+            return result;
         }
 
-        string seedName = currentPlant.seedData.seedName;
-        Plant prefabAsli = currentPlant.seedData.prefab;
-        Sprite iconAsli = currentPlant.seedData.icon;
+        // Akses seedData
+        SeedData sd = currentPlant.seedData;
 
-        int qty = Random.Range(1, 3);
+        if (sd == null)
+        {
+            Debug.LogError("SeedData belum di-assign pada Plant!");
+            return result;
+        }
 
+        // RANDOM JUMLAH
+        int seedQty = Random.Range(1, 3);    // min 1 max 2
+        int harvestQty = Random.Range(1, 3); // min 1 max 2
+
+        // Tambah seed (hasil panen)
+        result.Add((sd.seedName, seedQty, sd.prefab, sd.icon));
+
+        // Tambah tanaman utuh (wortel)
+        result.Add((sd.harvestName, harvestQty, sd.harvestPrefab, sd.harvestIcon));
+
+        // bersihkan
         Destroy(currentPlant.gameObject);
         currentPlant = null;
 
         currentState = SoilState.Hoed;
         UpdateSprite();
 
-        return (seedName, qty, prefabAsli, iconAsli);
+        return result;
     }
 
     // REMOVE DEAD PLANT
@@ -96,7 +108,7 @@ public class SoilTile : MonoBehaviour
     {
         if (currentPlant == null) return;
 
-        if (currentPlant.IsDead())
+        if (currentPlant.IsDead())   // ← SEKARANG TIDAK MERAH
         {
             Destroy(currentPlant.gameObject);
             currentPlant = null;
@@ -109,7 +121,9 @@ public class SoilTile : MonoBehaviour
     public void ResetSoil()
     {
         if (currentPlant != null)
+        {
             Destroy(currentPlant.gameObject);
+        }
 
         currentPlant = null;
         currentState = SoilState.Grass;
@@ -122,7 +136,6 @@ public class SoilTile : MonoBehaviour
         Debug.Log("Tanaman siap panen.");
     }
 
-    // UPDATE SPRITE
     void UpdateSprite()
     {
         sr.sprite = currentState switch
