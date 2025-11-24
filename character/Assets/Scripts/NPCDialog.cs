@@ -17,6 +17,12 @@ public class NPCDialog : MonoBehaviour
     [Header("Gift Seed Info")]
     public SeedData seedData;   // drag ScriptableObject seed di inspector
 
+    AudioManager audioManager;
+    private void Awake()
+    {
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
+    }
+
     string[] dialogLines =
     {
         "Hai! Kamu terlihat seperti ingin belajar bertani.",
@@ -65,6 +71,7 @@ public class NPCDialog : MonoBehaviour
         );
 
         Debug.Log("NPC memberi item + seed.");
+        audioManager.PlaySFX(audioManager.feedback);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -76,6 +83,7 @@ public class NPCDialog : MonoBehaviour
             isPlayerNear = true;
         }
     }
+
 
 
     private void OnTriggerExit2D(Collider2D collision)
