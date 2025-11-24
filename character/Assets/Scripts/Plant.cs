@@ -13,13 +13,10 @@ public class Plant : MonoBehaviour
     public float fertilizerSpeedMultiplier = 1.7f;
 
     [Header("Harvest Info")]
-    public string seedName;
-    public int harvestQuantity = 1;
-    public Sprite seedIcon;     // icon untuk inventory
-    public Plant seedPrefab;    // prefab untuk ditanam lagi
-    [Header("Seed Data")]
-    public SeedData seedData;
+    public int maxStage = 2;  // stage 0,1,2 → 2 = matang total
 
+    [Header("Seed Data")]
+    public SeedData seedData; // dari ScriptableObject
 
     private SpriteRenderer sr;
     private int currentStage = 0;
@@ -39,7 +36,11 @@ public class Plant : MonoBehaviour
 
     public void SetSoil(SoilTile s) => soil = s;
     public bool IsDead() => dead;
-    public bool IsReady() => (!dead && currentStage >= 2);
+
+    public bool IsReadyToHarvest()
+    {
+        return !dead && currentStage >= maxStage;
+    }
 
     public void OnWatered() => watered = true;
     public void OnFertilized() => fertilized = true;
@@ -50,12 +51,14 @@ public class Plant : MonoBehaviour
 
         timeSincePlanted += Time.deltaTime;
 
+        // tanaman mati kalau tidak disiram
         if (!watered && timeSincePlanted >= waterDeadline)
         {
             Die();
             return;
         }
 
+        // kalau sudah disiram → mulai tumbuh
         if (watered)
         {
             float speed = fertilized ? fertilizerSpeedMultiplier : 1f;
@@ -69,10 +72,10 @@ public class Plant : MonoBehaviour
             }
             else if (currentStage == 1 && stageTimer >= growTimePerStage)
             {
-                currentStage = 2;
+                currentStage = 2;  // stage matang
                 stageTimer = 0;
                 UpdateSprite();
-                soil?.OnPlantReady();
+                soil?.OnPlantReady(); // callback tanah
             }
         }
     }
@@ -83,17 +86,18 @@ public class Plant : MonoBehaviour
 
         if (currentStage == 0) sr.sprite = stage1;
         else if (currentStage == 1) sr.sprite = stage2;
-        else sr.sprite = stage3;
+        else sr.sprite = stage3; // stage3 = tahap matang visual
     }
 
     public void Die()
     {
         dead = true;
+
         if (sr != null)
-            sr.color = new Color(0.5f, 0.4f, 0.4f);
+            sr.color = new Color(0.4f, 0.3f, 0.3f); // warna mati
     }
 
-    // dipanggil ketika ditanam agar stage normal lagi
+    // dipanggil ketika baru ditanam
     public void ResetPlant()
     {
         currentStage = 0;

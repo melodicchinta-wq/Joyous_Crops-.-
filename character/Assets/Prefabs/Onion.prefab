@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6102071504262258945}
   - component: {fileID: 2440495183119425323}
   - component: {fileID: 8260173280785558889}
-  - component: {fileID: 9028928494039539756}
+  - component: {fileID: 8848805344831034452}
   m_Layer: 0
   m_Name: Onion
   m_TagString: Untagged
@@ -75,7 +75,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 10
-  m_Sprite: {fileID: 21300000, guid: 1e7639908ed56554182ca94f8456ba95, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 4b5aa37384dcd354194f34784ac98b08, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -131,7 +131,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &9028928494039539756
+--- !u!114 &8848805344831034452
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -140,16 +140,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 6634103253707130582}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: de4d187965ec5e144bcfc284e520300a, type: 3}
+  m_Script: {fileID: 11500000, guid: 6a159b41a70b4b44b8d52e3b482f1bd8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stage1: {fileID: 21300000, guid: 1e7639908ed56554182ca94f8456ba95, type: 3}
-  stage2: {fileID: 21300000, guid: 5ed58743ad1faea45a0d622218557ffb, type: 3}
-  stage3: {fileID: 21300000, guid: fb34f801aed59494ca749c8364c9e29e, type: 3}
+  stage1: {fileID: 21300000, guid: b6a17c9003fb39b4ebfe3eafe3869549, type: 3}
+  stage2: {fileID: 21300000, guid: 4f39b924a448b7040834690292e51065, type: 3}
+  stage3: {fileID: 21300000, guid: 8f5aeb0b609b7e3428d06e2df32054de, type: 3}
   growTimePerStage: 5
   waterDeadline: 7
   fertilizerSpeedMultiplier: 1.7
   seedName: Onion
   harvestQuantity: 1
-  seedIcon: {fileID: 21300000, guid: f2bb1342553b77f48ae67a2991e6964f, type: 3}
-  seedPrefab: {fileID: 9028928494039539756}
+  seedIcon: {fileID: 21300000, guid: ad5aed2a9b4702b4f8fc6e626697d4c5, type: 3}
+  seedPrefab: {fileID: 8848805344831034452}
+  seedData: {fileID: 11400000, guid: 4d87688f180b4ce4282877c91a50fc02, type: 2}

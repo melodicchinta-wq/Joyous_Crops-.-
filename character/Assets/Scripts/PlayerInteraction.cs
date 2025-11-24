@@ -67,15 +67,20 @@ public class PlayerInteraction : MonoBehaviour
         {
             if (currentSoil != null)
             {
-                var result = currentSoil.Harvest();
+                var resultList = currentSoil.Harvest();
 
-                if (!string.IsNullOrEmpty(result.name) && result.qty > 0)
+                foreach (var r in resultList)
                 {
-                    inventory.AddQuantity(result.name, result.qty, result.prefab, result.icon);
-                    inventoryUI.UpdateUI();
+                    inventory.AddQuantity(r.name, r.qty, r.prefab, r.icon);
                 }
+
+                inventoryUI.UpdateUI();
+
             }
+
         }
+        if (Input.GetKeyDown(KeyCode.X))  // misal tombol X untuk cabut tanaman mati
+            currentSoil?.RemoveDeadPlant();
 
 
         // reset tanah
@@ -110,4 +115,5 @@ public class PlayerInteraction : MonoBehaviour
 
         currentSoil = closest;
     }
+
 }
