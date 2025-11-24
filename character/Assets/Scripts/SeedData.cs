@@ -1,3 +1,4 @@
+// SeedData: (you already have; keep as-is)
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "NewSeed", menuName = "Farming/Seed Data")]

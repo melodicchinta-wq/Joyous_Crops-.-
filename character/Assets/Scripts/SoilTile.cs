@@ -62,45 +62,37 @@ public class SoilTile : MonoBehaviour
     // HARVEST
     public List<(string name, int qty, Plant prefab, Sprite icon)> Harvest()
     {
-        var result = new List<(string, int, Plant, Sprite)>();
+        var list = new List<(string, int, Plant, Sprite)>();
 
         if (currentPlant == null)
-            return result;
+            return list;
 
         // CEK SIAP PANEN
         if (!currentPlant.IsReadyToHarvest())
         {
             Debug.Log("Belum siap panen!");
-            return result;
+            return list;
         }
 
-        // Akses seedData
-        SeedData sd = currentPlant.seedData;
-
-        if (sd == null)
-        {
-            Debug.LogError("SeedData belum di-assign pada Plant!");
-            return result;
-        }
+        var seed = currentPlant.seedData;
 
         // RANDOM JUMLAH
-        int seedQty = Random.Range(1, 3);    // min 1 max 2
-        int harvestQty = Random.Range(1, 3); // min 1 max 2
+        int seedQtyRandom = Random.Range(1, 3);     // min 1 max 2
+        int harvestQtyRandom = Random.Range(1, 3);  // min 1 max 2
 
-        // Tambah seed (hasil panen)
-        result.Add((sd.seedName, seedQty, sd.prefab, sd.icon));
+        // 1. RANDOM SEED
+        list.Add((seed.seedName, seedQtyRandom, seed.prefab, seed.icon));
 
-        // Tambah tanaman utuh (wortel)
-        result.Add((sd.harvestName, harvestQty, sd.harvestPrefab, sd.harvestIcon));
+        // 2. RANDOM WORTEL UTUH
+        list.Add((seed.harvestName, harvestQtyRandom, seed.harvestPrefab, seed.harvestIcon));
 
-        // bersihkan
         Destroy(currentPlant.gameObject);
         currentPlant = null;
 
         currentState = SoilState.Hoed;
         UpdateSprite();
 
-        return result;
+        return list;
     }
 
     // REMOVE DEAD PLANT
@@ -122,7 +114,10 @@ public class SoilTile : MonoBehaviour
     {
         if (currentPlant != null)
         {
-            Destroy(currentPlant.gameObject);
+            if (Application.IsPlaying(gameObject))
+                Destroy(currentPlant.gameObject);
+            else
+                DestroyImmediate(currentPlant.gameObject);
         }
 
         currentPlant = null;
