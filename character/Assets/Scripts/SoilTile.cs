@@ -114,16 +114,17 @@ public class SoilTile : MonoBehaviour
     {
         if (currentPlant != null)
         {
-            if (Application.IsPlaying(gameObject))
+            if (Application.isPlaying)
                 Destroy(currentPlant.gameObject);
             else
-                DestroyImmediate(currentPlant.gameObject);
+                DestroyImmediate(currentPlant.gameObject, true);
         }
 
         currentPlant = null;
         currentState = SoilState.Grass;
         UpdateSprite();
     }
+
 
     // CALLBACK READY
     public void OnPlantReady()

@@ -10,6 +10,8 @@ public class PlayerInteraction : MonoBehaviour
     private Inventory inventory;
     private InventoryUI inventoryUI;
     public bool hasHoe = false; // awalnya false
+
+    public WaterBar waterBar;
     public string ActiveTool { get { return activeTool; } }
 
     // Tambahan untuk equip item ke player
@@ -86,10 +88,17 @@ public class PlayerInteraction : MonoBehaviour
 
         // AIR
         if (Input.GetKeyDown(KeyCode.Z))
-            currentSoil?.Water();
+        {
+            if (currentSoil != null && waterBar.currentWater > 0)
+            {
+                currentSoil.Water();
+                waterBar.UseWater(10f); // contoh pakai 10 air per tanah
+            }
+        }
+
 
         // PUPUK
-        if (Input.GetKeyDown(KeyCode.X))
+        if (Input.GetKeyDown(KeyCode.P))
             currentSoil?.Fertilize();
 
         // PANEN
