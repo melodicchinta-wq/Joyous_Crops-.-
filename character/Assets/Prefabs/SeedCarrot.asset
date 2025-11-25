@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   seedName: SeedCarrot
   prefab: {fileID: 4818160468463937797, guid: d4d722e1551b68f4492ece413f5ef663, type: 3}
-  icon: {fileID: 21300000, guid: 3b35e33edd905df43ab4d60373fb4f0a, type: 3}
+  icon: {fileID: 21300000, guid: 3e36c95b1e0a375448942103bbc39c27, type: 3}
   harvestName: Carrot
-  harvestIcon: {fileID: 21300000, guid: 0a0de3fcdc686fd4e8e856b33d2ed051, type: 3}
+  harvestIcon: {fileID: 21300000, guid: 595fadc4f051b354db2f4096d08bd811, type: 3}
   harvestPrefab: {fileID: 0}
   harvestQty: 1

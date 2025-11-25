@@ -63,7 +63,7 @@ public class NPCDialog : MonoBehaviour
             seedData.prefab,
             seedData.icon
         );
-
+        FindObjectOfType<InventoryUI>().UpdateUI();
         Debug.Log("NPC memberi Hoe + Seed!");
     }
 

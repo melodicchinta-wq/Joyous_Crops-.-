@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - Audio
+  - WaterPot
+  - River
+  - Soil
   layers:
   - Default
   - TransparentFX
@@ -12,7 +15,7 @@ TagManager:
   - Soil
   - Water
   - UI
-  - 
+  - River
   - 
   - 
   - 
@@ -56,4 +59,7 @@ TagManager:
     locked: 0
   - name: hoe
     uniqueID: 3392587243
+    locked: 0
+  - name: WaterPot
+    uniqueID: 4072529611
     locked: 0
