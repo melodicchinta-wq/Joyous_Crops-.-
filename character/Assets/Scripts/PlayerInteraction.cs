@@ -62,27 +62,39 @@ public class PlayerInteraction : MonoBehaviour
         }
 
         // TANAM / HOE (tekan E)
+        // INTERAKSI UTAMA (E)
         if (Input.GetKeyDown(KeyCode.E))
         {
-            if (currentSoil != null)
-            {
-                // Kalau player punya Hoe
-                if (inventory.hasHoe)
-                {
-                    EquipItem("Hoe"); // tampilkan Hoe
-                    currentSoil.Hoe();
-                }
+            if (currentSoil == null) return;
 
-                // Tanam seed
-                var seedItem = inventory.GetActiveSeedItem();
-                if (seedItem != null && seedItem.amount > 0)
+            var seedItem = inventory.GetActiveSeedItem();
+
+            // 1. Kalau ADA SEED terpilih → TANAM
+            if (seedItem != null && seedItem.amount > 0)
+            {
+                if (currentSoil.currentState == SoilTile.SoilState.Hoed) // hanya bisa tanam kalau sudah dicangkul dulu
                 {
                     currentSoil.PlantSeed(seedItem.plantPrefab);
-                    if (currentSoil.currentState == SoilTile.SoilState.Hoed)
-                        inventory.UseActiveSeed();
+                    inventory.UseActiveSeed();
+                    inventoryUI.UpdateUI();
+                    return;
                 }
+                else
+                {
+                    Debug.Log("Tanah belum dicangkul!");
+                    return;
+                }
+            }
 
-                inventoryUI.UpdateUI();
+            // 2. Kalau TIDAK ADA seed dipilih → CANGKUL
+            if (inventory.hasHoe)
+            {
+                EquipItem("Hoe");
+                currentSoil.Hoe();
+            }
+            else
+            {
+                Debug.Log("Kamu belum punya Hoe!");
             }
         }
 
