@@ -10,9 +10,9 @@ public class WaterBar : MonoBehaviour
 
     void Start()
     {
-        currentWater = maxWater;
+        currentWater = 0f;
         slider.maxValue = maxWater;
-        slider.value = currentWater;
+        slider.value = 0f;
     }
 
     public void UseWater(float amount)

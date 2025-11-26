@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: c3c400071ae82c44ba0b96c8cfdaf398
+guid: 28db06798ac8e9b499ed7b2880040f4a
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -34,7 +34,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -43,12 +43,12 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 140
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -72,7 +72,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -121,7 +121,28 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: soil_wet_0
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 233
+        width: 144
+        height: 145
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b45dd6694dd5c8d4e9fb103cab1f21f7
+      internalID: 1641555959
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -132,7 +153,45 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      soil_wet_0: 1641555959
+      soil_wet_1: -528635886
+      soil_wet_10: 1181550196
+      soil_wet_11: -818958583
+      soil_wet_12: 368789239
+      soil_wet_13: 540773106
+      soil_wet_14: 1925590816
+      soil_wet_15: -12570561
+      soil_wet_16: -709344946
+      soil_wet_17: -428773721
+      soil_wet_18: -1468125861
+      soil_wet_19: 1443742231
+      soil_wet_2: -587450247
+      soil_wet_20: -843806176
+      soil_wet_21: 2003791154
+      soil_wet_22: 1284836976
+      soil_wet_23: 67671222
+      soil_wet_24: 941738456
+      soil_wet_25: -936600959
+      soil_wet_26: -1203734409
+      soil_wet_27: -393879542
+      soil_wet_28: 851819812
+      soil_wet_29: 218554009
+      soil_wet_3: -1857196034
+      soil_wet_30: 1697527069
+      soil_wet_31: -1459523097
+      soil_wet_32: -1675993017
+      soil_wet_33: 1003846859
+      soil_wet_34: 1373213996
+      soil_wet_35: 1745694061
+      soil_wet_36: -570466085
+      soil_wet_37: 447117521
+      soil_wet_4: 125163005
+      soil_wet_5: -842222709
+      soil_wet_6: 1760296745
+      soil_wet_7: 1583929290
+      soil_wet_8: -938075769
+      soil_wet_9: -249769569
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

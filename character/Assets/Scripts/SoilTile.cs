@@ -112,18 +112,22 @@ public class SoilTile : MonoBehaviour
     // RESET SOIL
     public void ResetSoil()
     {
+        if (!Application.isPlaying)
+        {
+            Debug.LogWarning("Tidak bisa reset tanah saat editor tidak sedang Play.");
+            return;
+        }
+
         if (currentPlant != null)
         {
-            if (Application.isPlaying)
-                Destroy(currentPlant.gameObject);
-            else
-                DestroyImmediate(currentPlant.gameObject, true);
+            Destroy(currentPlant.gameObject);
         }
 
         currentPlant = null;
         currentState = SoilState.Grass;
         UpdateSprite();
     }
+
 
 
     // CALLBACK READY
