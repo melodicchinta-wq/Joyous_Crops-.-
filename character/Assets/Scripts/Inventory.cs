@@ -90,4 +90,22 @@ public class Inventory : MonoBehaviour
             icon = icon
         });
     }
+    public SeedItem GetSeed(string name)
+    {
+        return seeds.Find(s => s.seedName == name);
+    }
+    // panggil ini ketika slot UI sudah dipakai untuk mengurangi inventory "source of truth"
+    public bool DecreaseQuantityByName(string seedName, int qty = 1)
+    {
+        var item = seeds.Find(s => s.seedName == seedName);
+        if (item == null) return false;
+
+        item.amount -= qty;
+        if (item.amount <= 0)
+        {
+            seeds.Remove(item);
+        }
+        return true;
+    }
+
 }

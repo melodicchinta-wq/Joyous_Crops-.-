@@ -8,6 +8,8 @@ TagManager:
   - WaterPot
   - River
   - Soil
+  - orange portal
+  - blue portal
   layers:
   - Default
   - TransparentFX
@@ -16,7 +18,7 @@ TagManager:
   - Water
   - UI
   - River
-  - 
+  - Pintu
   - 
   - 
   - 
@@ -62,4 +64,7 @@ TagManager:
     locked: 0
   - name: WaterPot
     uniqueID: 4072529611
+    locked: 0
+  - name: pintu
+    uniqueID: 1485560219
     locked: 0

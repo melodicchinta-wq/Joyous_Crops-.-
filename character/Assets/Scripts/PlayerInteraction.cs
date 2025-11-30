@@ -46,9 +46,7 @@ public class PlayerInteraction : MonoBehaviour
         DetectSoil();
 
         // pilih slot seed via keyboard
-        if (Input.GetKeyDown(KeyCode.Alpha1)) inventory.SelectIndex(0);
-        if (Input.GetKeyDown(KeyCode.Alpha2)) inventory.SelectIndex(1);
-        if (Input.GetKeyDown(KeyCode.Alpha3)) inventory.SelectIndex(2);
+
 
         // HOE
         if (Input.GetKeyDown(KeyCode.Q))
@@ -67,24 +65,32 @@ public class PlayerInteraction : MonoBehaviour
         {
             if (currentSoil == null) return;
 
-            var seedItem = inventory.GetActiveSeedItem();
-
-            // 1. Kalau ADA SEED terpilih → TANAM
-            if (seedItem != null && seedItem.amount > 0)
+            // ambil slot UI aktif
+            int slotIndex = inventoryUI.selectedIndex;
+            if (slotIndex >= 0 && slotIndex < inventoryUI.slots.Length)
             {
-                if (currentSoil.currentState == SoilTile.SoilState.Hoed) // hanya bisa tanam kalau sudah dicangkul dulu
+                var uiSlot = inventoryUI.slots[slotIndex];
+                var slotSeed = uiSlot.GetCurrentSeed();
+
+                if (slotSeed != null && slotSeed.amount > 0)
                 {
-                    currentSoil.PlantSeed(seedItem.plantPrefab);
-                    inventory.UseActiveSeed();
-                    inventoryUI.UpdateUI();
-                    return;
-                }
-                else
-                {
-                    Debug.Log("Tanah belum dicangkul!");
-                    return;
+                    if (currentSoil.currentState == SoilTile.SoilState.Hoed)
+                    {
+                        currentSoil.PlantSeed(slotSeed.plantPrefab);
+
+                        inventory.UseActiveSeed(1);
+                        inventoryUI.UpdateUI();
+
+                        return;
+                    }
+                    else
+                    {
+                        Debug.Log("Tanah belum dicangkul!");
+                        return;
+                    }
                 }
             }
+
 
             // 2. Kalau TIDAK ADA seed dipilih → CANGKUL
             if (inventory.hasHoe)
@@ -122,7 +128,9 @@ public class PlayerInteraction : MonoBehaviour
                 foreach (var r in resultList)
                     inventory.AddQuantity(r.name, r.qty, r.prefab, r.icon);
 
-                inventoryUI.UpdateUI();
+                // sekarang map item inventory baru ke slot UI (stack or fill empty)
+                inventoryUI.ApplyInventoryAddsToSlots();
+
             }
         }
 
@@ -173,4 +181,5 @@ public class PlayerInteraction : MonoBehaviour
             Gizmos.DrawWireCube(currentSoil.transform.position, Vector3.one * 0.5f);
         }
     }
+
 }

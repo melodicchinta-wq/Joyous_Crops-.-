@@ -15,7 +15,8 @@ public class NPCDialog : MonoBehaviour
     private bool hasGivenItems = false;
 
     [Header("Gift Seed Info")]
-    public SeedData seedData;
+    public SeedData carrotSeed;   // wortel
+    public SeedData onionSeed;
 
     string[] dialogLines =
     {
@@ -56,14 +57,19 @@ public class NPCDialog : MonoBehaviour
                 slot.ShowButton(true); // tampilkan tombol
         }
 
-        // Beri seed
-        playerInventory.AddQuantity(
-            seedData.seedName,
-            1,
-            seedData.prefab,
-            seedData.icon
-        );
-        FindObjectOfType<InventoryUI>().UpdateUI();
+
+        InventoryUI ui = FindObjectOfType<InventoryUI>();
+        // Tambahkan seed ke inventory
+        playerInventory.AddQuantity(carrotSeed.seedName, 2, carrotSeed.prefab, carrotSeed.icon);
+        playerInventory.AddQuantity(onionSeed.seedName, 2, onionSeed.prefab, onionSeed.icon);
+
+        // Masukkan inventory ke UI (stack atau isi slot kosong)
+        ui.ApplyInventoryAddsToSlots();
+
+        ui.UpdateUI();
+
+
+
         Debug.Log("NPC memberi Hoe + Seed!");
     }
 
