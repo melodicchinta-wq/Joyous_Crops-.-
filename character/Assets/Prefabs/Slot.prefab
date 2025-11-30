@@ -219,6 +219,8 @@ GameObject:
   m_Component:
   - component: {fileID: 5842635133338605286}
   - component: {fileID: 1732416154480713874}
+  - component: {fileID: 6519037366344234108}
+  - component: {fileID: 2959225571076551018}
   m_Layer: 5
   m_Name: Slot
   m_TagString: Untagged
@@ -265,6 +267,26 @@ MonoBehaviour:
   qtyText: {fileID: 3268268272690117646}
   highlight: {fileID: 3078412496441355789}
   button: {fileID: 40484323071528072}
+--- !u!225 &6519037366344234108
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5362946160994034719}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
+--- !u!222 &2959225571076551018
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5362946160994034719}
+  m_CullTransparentMesh: 0
 --- !u!1 &6132849237603498888
 GameObject:
   m_ObjectHideFlags: 0
