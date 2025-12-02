@@ -125,14 +125,22 @@ public class PlayerInteraction : MonoBehaviour
             if (currentSoil != null)
             {
                 var resultList = currentSoil.Harvest();
+
                 foreach (var r in resultList)
-                    inventory.AddQuantity(r.name, r.qty, r.prefab, r.icon);
+                {
+                    var newStacks = inventory.AddItemWithMax(r.name, r.qty, r.prefab, r.icon);
 
-                // sekarang map item inventory baru ke slot UI (stack or fill empty)
-                inventoryUI.ApplyInventoryAddsToSlots();
+                    // tampilkan stack baru ke UI
+                    foreach (var newSeed in newStacks)
+                        inventoryUI.AddItemToEmptySlot(newSeed);
+                }
 
+                // update UI (qty, icon)
+                inventoryUI.UpdateUI();
+                inventoryUI.RefreshUIFromInventory();
             }
         }
+
 
         // CABUT TANAMAN MATI
         if (Input.GetKeyDown(KeyCode.X))

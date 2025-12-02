@@ -3,7 +3,8 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using TMPro;
 
-public class InventorySlotUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler
+public class InventorySlotUI : MonoBehaviour,
+    IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler
 {
     public Image icon;
     public TMP_Text qtyText;
@@ -11,33 +12,53 @@ public class InventorySlotUI : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     public Button button;
 
     private InventoryUI ui;
+    private Inventory inventory;
+
     private SeedItem currentSeed;
+    public int slotIndex;
 
     private Transform originalParent;
-    private CanvasGroup canvasGroup;
+    private CanvasGroup cg;
+
     public bool IsEmpty => currentSeed == null;
 
 
     void Awake()
     {
-        canvasGroup = icon.GetComponent<CanvasGroup>();
-        if (canvasGroup == null)
-            canvasGroup = icon.gameObject.AddComponent<CanvasGroup>();
+        cg = icon.GetComponent<CanvasGroup>();
+        if (cg == null)
+            cg = icon.gameObject.AddComponent<CanvasGroup>();
+
+        // Pastikan sorting text di atas icon
+        qtyText.canvas.overrideSorting = true;
+        qtyText.canvas.sortingOrder = 20;
+
+        icon.canvas.overrideSorting = true;
+        icon.canvas.sortingOrder = 10;
     }
+
 
     public void Init(int index, InventoryUI uiRef)
     {
+        slotIndex = index;
         ui = uiRef;
+        inventory = uiRef.inventory;
+
         button.onClick.AddListener(() => ui.SelectSlot(index));
     }
 
+
+    // =======================
+    // SLOT CONTENT
+    // =======================
     public void SetSlot(SeedItem seed)
     {
         currentSeed = seed;
+
         if (seed != null && seed.amount > 0)
         {
-            icon.gameObject.SetActive(true);
             icon.sprite = seed.icon;
+            icon.gameObject.SetActive(true);
             qtyText.text = seed.amount.ToString();
         }
         else
@@ -49,10 +70,13 @@ public class InventorySlotUI : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     public void ClearSlot()
     {
         currentSeed = null;
+        icon.sprite = null;
         icon.gameObject.SetActive(false);
         qtyText.text = "";
         highlight.SetActive(false);
     }
+
+    public SeedItem GetCurrentSeed() => currentSeed;
 
     public void SetHighlight(bool value)
     {
@@ -60,27 +84,22 @@ public class InventorySlotUI : MonoBehaviour, IBeginDragHandler, IDragHandler, I
             highlight.SetActive(value);
     }
 
-    public SeedItem GetCurrentSeed()
-    {
-        return currentSeed;
-    }
 
-    // ======================
-    // DRAG ICON
-    // ======================
+    // =======================
+    // DRAG SYSTEM
+    // =======================
     public void OnBeginDrag(PointerEventData eventData)
     {
-        if (currentSeed == null) return;
+        if (IsEmpty) return;
 
         originalParent = icon.transform.parent;
-        icon.transform.SetParent(ui.transform); // tarik ke atas semua UI
-        canvasGroup.blocksRaycasts = false;      // supaya slot bisa detect drop
+        icon.transform.SetParent(ui.transform);   // icon ke layer paling atas
+        cg.blocksRaycasts = false;
     }
 
     public void OnDrag(PointerEventData eventData)
     {
-        if (currentSeed == null) return;
-
+        if (IsEmpty) return;
         icon.transform.position = eventData.position;
     }
 
@@ -88,32 +107,66 @@ public class InventorySlotUI : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     {
         icon.transform.SetParent(originalParent);
         icon.transform.localPosition = Vector3.zero;
-        canvasGroup.blocksRaycasts = true;
+        cg.blocksRaycasts = true;
+
+        ui.UpdateUI();
+        inventory.activeSeedIndex = ui.selectedIndex; // sync selection
     }
 
+
+    // =======================
+    // DROP SYSTEM (MERGE & SWAP)
+    // =======================
     public void OnDrop(PointerEventData eventData)
     {
-        InventorySlotUI draggedSlot = eventData.pointerDrag.GetComponentInParent<InventorySlotUI>();
-        if (draggedSlot == null) return;
+        var draggedSlot = eventData.pointerDrag.GetComponent<InventorySlotUI>();
+        if (draggedSlot == null || draggedSlot == this) return;
 
-        // swap item
-        SeedItem temp = draggedSlot.currentSeed;
-        draggedSlot.SetSlot(currentSeed);
-        SetSlot(temp);
+        var draggedItem = draggedSlot.GetCurrentSeed();
+        var targetItem = currentSeed;
 
-        // sinkronisasi ke Inventory
-        ui.SyncInventoryWithUI();
+
+        // ---- 1. DROP KE SLOT KOSONG → PINDAH ----
+        if (targetItem == null)
+        {
+            SetSlot(draggedItem);
+            draggedSlot.ClearSlot();
+            ui.UpdateUI();
+            return;
+        }
+
+
+        // ---- 2. MERGE STACK JIKA BISA ----
+        if (inventory.TryMerge(targetItem, draggedItem))
+        {
+            if (draggedItem.amount <= 0)
+                draggedSlot.ClearSlot();
+
+            ui.RefreshUIFromInventory();
+            return;
+        }
+
+
+        // ---- 3. TIDAK BISA MERGE → SWAP ----
+        ui.SwapSlots(slotIndex, draggedSlot.slotIndex);
     }
+
+
+    // Dipanggil ketika dipakai (misal menanam)
     public void UseItem(int count = 1)
     {
-        if (currentSeed == null) return;
+        if (IsEmpty) return;
 
         currentSeed.amount -= count;
         if (currentSeed.amount <= 0)
-            ClearSlot(); // slot jadi kosong
-
-        // update text
-        qtyText.text = currentSeed != null ? currentSeed.amount.ToString() : "";
+        {
+            ClearSlot();
+        }
+        else
+        {
+            qtyText.text = currentSeed.amount.ToString();
+        }
+        inventory.DecreaseQuantityByName(currentSeed.seedName, count);
+        ui.RefreshUIFromInventory();
     }
-
 }

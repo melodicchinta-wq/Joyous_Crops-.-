@@ -9,6 +9,7 @@ public class SeedItem
     public Plant plantPrefab;
     public int amount;
     public Sprite icon;
+    public int maxCount = 8;  // NEW!! max per slot
 }
 
 public class Inventory : MonoBehaviour
@@ -105,6 +106,66 @@ public class Inventory : MonoBehaviour
         {
             seeds.Remove(item);
         }
+        return true;
+    }
+    public List<SeedItem> AddItemWithMax(string seedName, int qty, Plant prefab = null, Sprite icon = null)
+    {
+        List<SeedItem> newStacks = new List<SeedItem>();
+        int remaining = qty;
+
+        // 1. Coba isi slot-slot yang sudah ada
+        foreach (var item in seeds)
+        {
+            if (item.seedName == seedName && item.amount < item.maxCount)
+            {
+                int canAdd = item.maxCount - item.amount;
+                int add = Mathf.Min(canAdd, remaining);
+
+                item.amount += add;
+                remaining -= add;
+
+                if (remaining <= 0)
+                    return newStacks;
+            }
+        }
+
+        // 2. Kalau masih ada sisa → buat slot baru
+        while (remaining > 0)
+        {
+            int add = Mathf.Min(remaining, 8);
+
+            SeedItem newItem = new SeedItem
+            {
+                seedName = seedName,
+                plantPrefab = prefab,
+                icon = icon,
+                amount = add,
+                maxCount = 8
+            };
+
+            seeds.Add(newItem);
+            newStacks.Add(newItem);
+
+            remaining -= add;
+        }
+
+        return newStacks; // ini nanti dipakai InventoryUI supaya tampil slot-slot baru
+    }
+    public bool TryMerge(SeedItem a, SeedItem b)
+    {
+        if (a == null || b == null) return false;
+        if (a.seedName != b.seedName) return false; // beda jenis ga bisa merge
+
+        int maxStack = a.maxCount;
+
+        int space = maxStack - a.amount;
+        if (space <= 0) return false; // sudah full
+
+        int move = Mathf.Min(space, b.amount);
+
+        a.amount += move;
+        b.amount -= move;
+
         return true;
     }
 
