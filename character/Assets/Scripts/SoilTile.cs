@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor;
 
 public class SoilTile : MonoBehaviour
 {
@@ -121,10 +120,8 @@ public class SoilTile : MonoBehaviour
 
         if (currentPlant != null)
         {
-            if (currentPlant.gameObject.scene.IsValid())   // hanya destroy object yg ada di scene
-                Destroy(currentPlant.gameObject);
+            Destroy(currentPlant.gameObject);
         }
-
 
         currentPlant = null;
         currentState = SoilState.Grass;

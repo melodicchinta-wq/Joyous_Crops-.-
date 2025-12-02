@@ -137,7 +137,6 @@ public class PlayerInteraction : MonoBehaviour
 
                 // update UI (qty, icon)
                 inventoryUI.UpdateUI();
-                inventoryUI.RefreshUIFromInventory();
             }
         }
 

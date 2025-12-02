@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class InventoryUI : MonoBehaviour
@@ -58,15 +59,19 @@ public class InventoryUI : MonoBehaviour
 
     public void UpdateUI()
     {
-        for (int i = 0; i < slots.Length; i++)
+        // hanya update qty dan icon
+        foreach (var slot in slots)
         {
-            if (i < inventory.seeds.Count)
+            var seed = slot.GetCurrentSeed();
+            if (seed != null && seed.amount > 0)
             {
-                slots[i].SetSlot(inventory.seeds[i]);
+                slot.icon.sprite = seed.icon;
+                slot.icon.gameObject.SetActive(true);
+                slot.qtyText.text = seed.amount.ToString();
             }
             else
             {
-                slots[i].ClearSlot();
+                slot.ClearSlot();
             }
         }
 
@@ -75,12 +80,31 @@ public class InventoryUI : MonoBehaviour
 
     public void SwapSlots(int a, int b)
     {
-        // swap data INVENTORY
+        if (a < 0 || b < 0) return;
+        if (a >= inventory.seeds.Count || b >= inventory.seeds.Count) return;
+
+        // swap data di Inventory
         var temp = inventory.seeds[a];
         inventory.seeds[a] = inventory.seeds[b];
         inventory.seeds[b] = temp;
 
-        RefreshUIFromInventory();
+        // perbaiki activeSeedIndex jika terkena swap
+        if (inventory.activeSeedIndex == a) inventory.activeSeedIndex = b;
+        else if (inventory.activeSeedIndex == b) inventory.activeSeedIndex = a;
+
+        UpdateUI();
+    }
+    public void SyncInventoryWithUI()
+    {
+        if (inventory == null) return;
+
+        inventory.seeds.Clear();
+        foreach (var slot in slots)
+        {
+            var seed = slot.GetCurrentSeed();
+            if (seed != null)
+                inventory.seeds.Add(seed);
+        }
     }
 
     public void LoadInventory()
@@ -159,18 +183,6 @@ public class InventoryUI : MonoBehaviour
 
         // akhir: refresh tampilan qty/icon/highlight
         UpdateUI();
-    }
-    public void RefreshUIFromInventory()
-    {
-        for (int i = 0; i < slots.Length; i++)
-        {
-            if (i < inventory.seeds.Count)
-                slots[i].SetSlot(inventory.seeds[i]);
-            else
-                slots[i].ClearSlot();
-        }
-
-        UpdateHighlight();
     }
 
 }

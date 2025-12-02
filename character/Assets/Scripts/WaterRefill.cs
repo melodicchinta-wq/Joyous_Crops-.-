@@ -6,7 +6,6 @@ public class WaterRefill : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            Debug.Log("REFILL MASUK!!!!");
             var player = other.GetComponent<PlayerInteraction>();
 
             if (player != null && player.waterBar != null)

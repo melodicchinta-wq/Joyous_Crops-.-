@@ -109,8 +109,8 @@ public class InventorySlotUI : MonoBehaviour,
         icon.transform.localPosition = Vector3.zero;
         cg.blocksRaycasts = true;
 
+        ui.SyncInventoryWithUI();
         ui.UpdateUI();
-        inventory.activeSeedIndex = ui.selectedIndex; // sync selection
     }
 
 
@@ -131,6 +131,7 @@ public class InventorySlotUI : MonoBehaviour,
         {
             SetSlot(draggedItem);
             draggedSlot.ClearSlot();
+            ui.SyncInventoryWithUI();
             ui.UpdateUI();
             return;
         }
@@ -142,7 +143,8 @@ public class InventorySlotUI : MonoBehaviour,
             if (draggedItem.amount <= 0)
                 draggedSlot.ClearSlot();
 
-            ui.RefreshUIFromInventory();
+            ui.SyncInventoryWithUI();
+            ui.UpdateUI();
             return;
         }
 
@@ -166,7 +168,8 @@ public class InventorySlotUI : MonoBehaviour,
         {
             qtyText.text = currentSeed.amount.ToString();
         }
-        inventory.DecreaseQuantityByName(currentSeed.seedName, count);
-        ui.RefreshUIFromInventory();
+
+        ui.SyncInventoryWithUI();
+        ui.UpdateUI();
     }
 }

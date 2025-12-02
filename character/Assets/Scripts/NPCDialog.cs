@@ -65,6 +65,7 @@ public class NPCDialog : MonoBehaviour
 
         // Masukkan inventory ke UI (stack atau isi slot kosong)
         ui.ApplyInventoryAddsToSlots();
+        ui.SyncInventoryWithUI(); // <-- TAMBAHKAN DI SINI
         ui.UpdateUI();
 
 

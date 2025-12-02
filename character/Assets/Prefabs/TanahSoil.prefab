@@ -60,7 +60,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.29538918, y: 0.086069025, z: -0.015268609}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1859456967732645252}
@@ -106,7 +106,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 7
+  m_SortingOrder: 0
   m_Sprite: {fileID: -1022843091, guid: c93ba6c573e7e8549ad3fb94e3d2138a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -178,6 +178,6 @@ MonoBehaviour:
   currentState: 0
   grassSprite: {fileID: -1022843091, guid: c93ba6c573e7e8549ad3fb94e3d2138a, type: 3}
   hoedSprite: {fileID: 769832816, guid: c93ba6c573e7e8549ad3fb94e3d2138a, type: 3}
-  wateredSprite: {fileID: -587450247, guid: 28db06798ac8e9b499ed7b2880040f4a, type: 3}
+  wateredSprite: {fileID: 1177821487, guid: c93ba6c573e7e8549ad3fb94e3d2138a, type: 3}
   plantSpawnPoint: {fileID: 1859456967732645252}
   currentPlant: {fileID: 4818160468463937797, guid: d4d722e1551b68f4492ece413f5ef663, type: 3}
