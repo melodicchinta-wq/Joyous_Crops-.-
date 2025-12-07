@@ -12,6 +12,9 @@ public class PlayerInteraction : MonoBehaviour
     public bool hasHoe = false; // awalnya false
 
     public WaterBar waterBar;
+
+    private AudioManager audioManager;
+
     public string ActiveTool { get { return activeTool; } }
 
     // Tambahan untuk equip item ke player
@@ -39,6 +42,7 @@ public class PlayerInteraction : MonoBehaviour
     {
         inventory = GetComponent<Inventory>();
         inventoryUI = FindObjectOfType<InventoryUI>();
+        audioManager = FindObjectOfType<AudioManager>();
     }
 
     void Update()
@@ -56,6 +60,7 @@ public class PlayerInteraction : MonoBehaviour
                 Debug.Log("Kamu belum punya cangkul!");
                 return;
             }
+            audioManager.PlaySFX(audioManager.mencangkul);
             currentSoil?.Hoe();
         }
 

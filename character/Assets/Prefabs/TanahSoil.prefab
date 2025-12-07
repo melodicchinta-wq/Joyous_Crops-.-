@@ -177,7 +177,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentState: 0
   grassSprite: {fileID: -1022843091, guid: c93ba6c573e7e8549ad3fb94e3d2138a, type: 3}
-  hoedSprite: {fileID: 769832816, guid: c93ba6c573e7e8549ad3fb94e3d2138a, type: 3}
-  wateredSprite: {fileID: 1177821487, guid: c93ba6c573e7e8549ad3fb94e3d2138a, type: 3}
+  hoedSprite: {fileID: 229468827, guid: e5e418725d73bf1419250a0698f4635e, type: 3}
+  wateredSprite: {fileID: 1641555959, guid: 28db06798ac8e9b499ed7b2880040f4a, type: 3}
   plantSpawnPoint: {fileID: 1859456967732645252}
   currentPlant: {fileID: 4818160468463937797, guid: d4d722e1551b68f4492ece413f5ef663, type: 3}

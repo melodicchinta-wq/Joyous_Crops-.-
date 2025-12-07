@@ -1,8 +1,11 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class OverlayFade : MonoBehaviour
 {
+    public bool sleepMode = false;
+
     public static OverlayFade instance;
 
     public Image overlayImage;
@@ -18,6 +21,8 @@ public class OverlayFade : MonoBehaviour
 
     void Update()
     {
+        if (sleepMode) return;   // JANGAN overrride alpha saat tidur
+
         float t = TimeController.instance.GetTimeNormalized();
         float alpha = CalculateDarkness(t);
         SetAlpha(alpha);
@@ -55,4 +60,20 @@ public class OverlayFade : MonoBehaviour
         c.a = a;
         overlayImage.color = c;
     }
+    public IEnumerator FadeTo(float targetAlpha, float duration)
+    {
+        float startAlpha = overlayImage.color.a;
+        float time = 0;
+
+        while (time < duration)
+        {
+            time += Time.deltaTime;
+
+            float a = Mathf.Lerp(startAlpha, targetAlpha, time / duration);
+            SetAlpha(a);
+
+            yield return null;
+        }
+    }
+
 }

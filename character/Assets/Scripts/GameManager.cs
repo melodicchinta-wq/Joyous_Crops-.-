@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    public OverlayFade overlayFade;
+
     public static GameManager instance;
 
     public TileManager tileManager;

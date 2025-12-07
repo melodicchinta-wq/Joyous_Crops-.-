@@ -120,8 +120,17 @@ public class SoilTile : MonoBehaviour
 
         if (currentPlant != null)
         {
-            Destroy(currentPlant.gameObject);
+            // Jika ini bukan instance di scene → JANGAN destroy
+            if (!currentPlant.gameObject.scene.IsValid())
+            {
+                Debug.LogWarning("currentPlant adalah prefab/asset — di-skip supaya tidak error.");
+            }
+            else
+            {
+                Destroy(currentPlant.gameObject);
+            }
         }
+
 
         currentPlant = null;
         currentState = SoilState.Grass;
